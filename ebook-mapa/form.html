@@ -1,0 +1,28 @@
+<form id="leadForm">
+  <input type="text" name="nome" placeholder="Seu Nome" required>
+  <input type="email" name="email" placeholder="Seu Melhor E-mail" required>
+  
+  <input type="hidden" name="origem" value="concurseirotop10_blog">
+  
+  <button type="submit">Quero meu Ebook</button>
+</form>
+
+<script>
+document.getElementById('leadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  try {
+    await fetch('https://n8n.devoluapp.cloud/webhook/captacao-mapa-concurseiro-top10', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    // Redireciona para página de obrigado após o POST
+    window.location.href = 'https://concurseirotop10.blog/obrigado';
+  } catch (error) {
+    alert('Erro ao enviar. Tente novamente.');
+  }
+});
+</script>
