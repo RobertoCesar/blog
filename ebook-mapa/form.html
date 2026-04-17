@@ -1,28 +1,32 @@
-<form id="leadForm">
-  <input type="text" name="nome" placeholder="Seu Nome" required>
-  <input type="email" name="email" placeholder="Seu Melhor E-mail" required>
-  
-  <input type="hidden" name="origem" value="concurseirotop10_blog">
-  
-  <button type="submit">Quero meu Ebook</button>
-</form>
-
 <script>
 document.getElementById('leadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
+  
+  // Captura os dados manualmente para garantir limpeza
+  const data = {
+    nome: e.target.nome.value,
+    email: e.target.email.value,
+    origem: e.target.origem.value
+  };
 
   try {
-    await fetch('https://n8n.devoluapp.cloud/webhook/captacao-mapa-concurseiro-top10', {
+    const response = await fetch('https://n8n.devoluapp.cloud/webhook-test/captacao-mapa-concurseiro-top10', {
       method: 'POST',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
     });
-    // Redireciona para página de obrigado após o POST
-    window.location.href = 'https://concurseirotop10.blog/ebook-mapa/obrigado.html';
+
+    if (response.ok) {
+      window.location.href = 'https://concurseirotop10.blog/ebook-mapa/obrigado.html';
+    } else {
+      console.error('Erro no servidor:', response.status);
+    }
   } catch (error) {
-    alert('Erro ao enviar. Tente novamente.');
+    console.error('Erro na requisição:', error);
+    alert('Erro ao enviar. Verifique o console.');
   }
 });
 </script>
